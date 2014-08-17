@@ -13,13 +13,13 @@ class Demonstrations {
     val output = Array(0.0, 2.0, 4.0, 6.0, 8.0, 10.0, 12.0, 14.0, 16.0, 18.0, 20.0)
 
     val result = new XYSeriesCollection();
-    val series = new XYSeries("");
+    val series = new XYSeries("Inicial values");
     for (i <- 0 until input.length) {
       series.add(input(i), output(i));
     }
 
     result.addSeries(series);
-    result.addSeries(new XYSeries("Predicted XY"))
+    result.addSeries(new XYSeries("Fitting prediction"))
 
     var chart = ChartFactory.createScatterPlot(
       "Prediction Graph", // chart title
@@ -56,8 +56,7 @@ class Demonstrations {
 }
 
 object Demonstrations extends App {
-  val demonstrations = new Demonstrations()
-  demonstrations.demonstrateLinearRegression()
+  new Demonstrations().demonstrateLinearRegression()
 }
 
 

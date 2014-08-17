@@ -1,5 +1,7 @@
 /**
  * Created by marceloortizdesantana on 16/08/14.
+ *
+ * Based on lessons of https://class.coursera.org/ml-006
  */
 class LinearRegression(val input: Array[Double], val output: Array[Double], val learningRate: Double = 0.05) {
 
@@ -31,7 +33,6 @@ class LinearRegression(val input: Array[Double], val output: Array[Double], val 
       var derivative1: Double = 0.0
       for (i <- 0 until m) {
         val diffHip_Out = hipotesis(input(i)) - output(i)
-        println(diffHip_Out)
         derivative0 += diffHip_Out
         derivative1 += diffHip_Out * input(i)
       }
@@ -44,17 +45,12 @@ class LinearRegression(val input: Array[Double], val output: Array[Double], val 
       param0 = temp0
       param1 = temp1
 
-      println("Diffs:", diffs)
-
       iteration += 1
 
       // call any callback
       callback()
 
     } while (iteration < maxIterations && diffs > 0.001)
-
-    println("Params ", param0, param1)
-
   }
 
   /**
