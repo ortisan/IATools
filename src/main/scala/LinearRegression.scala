@@ -1,13 +1,15 @@
+import scala.util.Random
+
 /**
  * Created by marceloortizdesantana on 16/08/14.
  *
  * Based on lessons of https://class.coursera.org/ml-006
  */
-class LinearRegression(val input: Array[Double], val output: Array[Double], val learningRate: Double = 0.05) {
+class LinearRegression(val input: Array[Double], val output: Array[Double], val learningRate: Double = 0.10) {
 
   // my guess params.
-  var param0 = 15.0
-  var param1 = 50.0
+  var param0: Double = Random.nextInt(1000)
+  var param1: Double = Random.nextInt(1000)
 
   /**
    * Folows the linear equation ( a + bx ) where a = param0, b = param1 and x = input

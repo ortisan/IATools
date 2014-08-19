@@ -12,13 +12,13 @@ class Demonstrations {
     val input = Array(0.0, 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0)
     val output = Array(0.0, 2.0, 4.0, 6.0, 8.0, 10.0, 12.0, 14.0, 16.0, 18.0, 20.0)
 
-    val result = new XYSeriesCollection();
-    val series = new XYSeries("Inicial values");
+    val result = new XYSeriesCollection()
+    val series = new XYSeries("Inicial values")
     for (i <- 0 until input.length) {
-      series.add(input(i), output(i));
+      series.add(input(i), output(i))
     }
 
-    result.addSeries(series);
+    result.addSeries(series)
     result.addSeries(new XYSeries("Fitting prediction"))
 
     var chart = ChartFactory.createScatterPlot(
@@ -30,21 +30,23 @@ class Demonstrations {
       true, // include legend
       true, // tooltips
       false // urls
-    );
+    )
 
     chart.getXYPlot.getRangeAxis().setAutoRange(true)
 
     val linearRegress = new LinearRegression(input, output, 0.015)
 
-    def updateGraph(): Unit = {
+    def updateGraph() {
 
       val series = result.getSeries(1)
+
+      series.clear()
 
       for (i <- 0 until input.length) {
         series.add(input(i), linearRegress.predict(input(i)))
       }
 
-      Thread.sleep(1000);
+      Thread.sleep(50)
     }
 
     // create and display a frame...
