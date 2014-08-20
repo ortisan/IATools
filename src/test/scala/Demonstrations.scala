@@ -2,6 +2,8 @@ import org.jfree.chart.plot.PlotOrientation
 import org.jfree.chart.{ChartFactory, ChartFrame}
 import org.jfree.data.xy.{XYSeries, XYSeriesCollection}
 
+import scala.collection.mutable.ArrayBuffer
+
 /**
  * Created by marceloortizdesantana on 17/08/14.
  */
@@ -48,7 +50,7 @@ class Demonstrations {
 
       Thread.sleep(50)
     }
-
+    chart.getXYPlot.getRangeAxis().setAutoRange(true)
     // create and display a frame...
     val frame = new ChartFrame("Linear Regression", chart)
     frame.pack()
@@ -56,13 +58,65 @@ class Demonstrations {
     linearRegress.train(updateGraph)
   }
 
-  def demonstrateLinearRegressionKnn(): Unit = {
+  def demonstrateKnn(): Unit = {
 
+    var dataset = Array(Array(1.0, 1.1), Array(1.1, 1.1), Array(0.0, 0.0), Array(0.1, 0.1))
+    var input = Array(0.3, 0.2)
+    val labels = Array("A", "A", "B", "B")
+
+    val result = new XYSeriesCollection()
+    var labelsPoints = Map[String, ArrayBuffer[Array[Double]]]()
+
+    for (i <- 0 until labels.length) {
+      val label = labels(i)
+      labelsPoints.get(label) match {
+        case Some(points: ArrayBuffer[Array[Double]]) => points ++= ArrayBuffer(dataset(i))
+        case None => labelsPoints += label -> ArrayBuffer(dataset(i))
+      }
+    }
+
+    labelsPoints.foreach {
+      case (label, points) => {
+        val series = new XYSeries(label)
+        for (i <- 0 until points.length) {
+          series.add(points(i)(0), points(i)(0))
+        }
+        result.addSeries(series)
+      }
+    }
+
+    var clazz = Knn.classify(input, dataset, labels, 1)
+    val seriesGuess = new XYSeries(clazz + "_i")
+    seriesGuess.add(input(0), input(1))
+    result.addSeries(seriesGuess)
+
+    var input2 = Array(0.8, 0.7)
+    clazz = Knn.classify(input2, dataset, labels, 1)
+    val seriesGuess2 = new XYSeries(clazz + "_i")
+    seriesGuess2.add(input2(0), input2(1))
+    result.addSeries(seriesGuess2)
+
+    var chart = ChartFactory.createScatterPlot(
+      "Knn classification", // chart title
+      "Attr1 (Attribute 1)", // x axis label
+      "Attr2 (Attribute 2)", // y axis label
+      result, // data
+      PlotOrientation.VERTICAL,
+      true, // include legend
+      true, // tooltips
+      false // urls
+    )
+
+    chart.getXYPlot.getRangeAxis().setAutoRange(true)
+    val frame = new ChartFrame("Knn Classification", chart)
+    frame.pack()
+    frame.setVisible(true)
   }
 }
 
 object Demonstrations extends App {
-  new Demonstrations().demonstrateLinearRegression()
+  //new Demonstrations().demonstrateLinearRegression()
+  new Demonstrations().demonstrateKnn()
 }
 
 
