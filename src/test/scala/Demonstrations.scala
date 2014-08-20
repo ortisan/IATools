@@ -55,6 +55,10 @@ class Demonstrations {
     frame.setVisible(true)
     linearRegress.train(updateGraph)
   }
+
+  def demonstrateLinearRegressionKnn(): Unit = {
+
+  }
 }
 
 object Demonstrations extends App {
