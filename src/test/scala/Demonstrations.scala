@@ -112,11 +112,69 @@ class Demonstrations {
     frame.pack()
     frame.setVisible(true)
   }
+
+  def demonstrateLinearRegressionWithRealDatas(): Unit = {
+
+    val cotacoesTeste: Array[DataCotacao] = Scrapper.cotacaoDolarEmReal()
+
+    val seriesTeste = new XYSeries("Cotacoes de teste")
+
+    var input = ArrayBuffer[Double]()
+    var output = ArrayBuffer[Double]()
+
+    for (cotacao <- cotacoesTeste) {
+      input ++= ArrayBuffer(cotacao.data.toDouble)
+      output ++= ArrayBuffer(cotacao.cotacao)
+      //seriesTeste.add(cotacao.data.toDouble, cotacao.cotacao)
+    }
+
+    val linearRegress = new LinearRegression(input.toArray, output.toArray, 0.015)
+    linearRegress.train(() => Unit)
+
+    val series = new XYSeries("Cotacoes")
+    val seriesPrevisao = new XYSeries("Previsao")
+
+    val cotacoes: Array[DataCotacao] = Scrapper.cotacaoDolarEmReal(qtdDias = 10, pularDias = 50)
+    for (cotacao <- cotacoes) {
+      series.add(cotacao.data.toDouble, cotacao.cotacao)
+      val input = cotacao.data.toDouble
+      val output = linearRegress.predict(input)
+      seriesPrevisao.add(input, output)
+    }
+
+    val result = new XYSeriesCollection()
+    result.addSeries(seriesTeste)
+    result.addSeries(series)
+    result.addSeries(seriesPrevisao)
+
+    var chart = ChartFactory.createScatterPlot(
+      "Regressão do dólar", // chart title
+      "Valor em R$", // x axis label
+      "Data", // y axis label
+      result, // data
+      PlotOrientation.VERTICAL,
+      true, // include legend
+      true, // tooltips
+      false // urls
+    )
+
+    chart.getXYPlot.getRangeAxis().setAutoRange(true)
+
+
+    // create and display a frame...
+    val frame = new ChartFrame("Regressão do dólar", chart)
+    frame.pack()
+    frame.setVisible(true)
+
+  }
+
+
 }
 
 object Demonstrations extends App {
   //new Demonstrations().demonstrateLinearRegression()
-  new Demonstrations().demonstrateKnn()
+  //new Demonstrations().demonstrateKnn()
+  new Demonstrations().demonstrateLinearRegressionWithRealDatas()
 }
 
 
