@@ -5,11 +5,11 @@ import scala.util.Random
  *
  * Based on lessons of https://class.coursera.org/ml-006
  */
-class LinearRegression(val input: Array[Double], val output: Array[Double], val learningRate: Double = 0.10) {
+class LinearRegression(val input: Array[Double], val output: Array[Double], val learningRate: Double = 0.005) {
 
   // my guess params.
-  var param0: Double = Random.nextInt(1000)
-  var param1: Double = Random.nextInt(1000)
+  var param0: Double = Random.nextInt(10)
+  var param1: Double = Random.nextInt(10)
 
   /**
    * Folows the linear equation ( a + bx ) where a = param0, b = param1 and x = input
@@ -21,7 +21,7 @@ class LinearRegression(val input: Array[Double], val output: Array[Double], val 
   /**
    * Train the algorithm, minimizing the param0 and param1 of linear formula (param0 + param1 * x)
    */
-  def train(callback: () => Unit): Unit = {
+  def train(callback: () => Unit = () => Unit): Unit = {
 
     val maxIterations = 5000
     var iteration = 0
@@ -41,6 +41,8 @@ class LinearRegression(val input: Array[Double], val output: Array[Double], val 
 
       val temp0 = param0 - learningRate * ((1.0 / m) * derivative0)
       val temp1 = param1 - learningRate * ((1.0 / m) * derivative1)
+
+      println(temp0, temp1)
 
       diffs = math.abs(param0 - temp0) + math.abs(param1 - temp1)
 

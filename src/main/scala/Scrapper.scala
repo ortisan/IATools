@@ -1,7 +1,7 @@
 import java.net.URL
-import java.time.format.DateTimeFormatter
-import java.time.temporal.{ChronoUnit, TemporalUnit, TemporalAdjusters}
 import java.time._
+import java.time.format.DateTimeFormatter
+import java.time.temporal.ChronoUnit
 
 import org.jsoup.Jsoup
 
@@ -16,8 +16,8 @@ object Scrapper extends App {
   def cotacaoDolarEmReal(ano: Int = 2014, mes: Month = Month.JANUARY, dia: Int = 1, qtdDias: Int = 50, pularDias: Int = 0): Array[DataCotacao] = {
     var datasCotacao = ArrayBuffer[DataCotacao]()
     var zona = ZoneId.of("America/Los_Angeles")
-    var date = LocalDateTime.of(2014, Month.JANUARY, 1, 0, 0, 0)
-    for (i <- pularDias until qtdDias + pularDias) {
+    var date = LocalDateTime.of(2014, Month.JANUARY, 1, 0, 0, 0).plus(pularDias, ChronoUnit.DAYS)
+    for (i <- 0 until qtdDias) {
       val dataFormatada = date.format(DateTimeFormatter.BASIC_ISO_DATE)
       val url = (s"https://finance.yahoo.com/currency/converter-pocket-guide/$dataFormatada/USD/BRL")
       val doc = Jsoup.parse(new URL(url), 2000)

@@ -115,7 +115,7 @@ class Demonstrations {
 
   def demonstrateLinearRegressionWithRealDatas(): Unit = {
 
-    val cotacoesTeste: Array[DataCotacao] = Scrapper.cotacaoDolarEmReal()
+    val cotacoesTeste: Array[DataCotacao] = Scrapper.cotacaoDolarEmReal(qtdDias = 10, pularDias = 50)
 
     val seriesTeste = new XYSeries("Cotacoes de teste")
 
@@ -123,26 +123,30 @@ class Demonstrations {
     var output = ArrayBuffer[Double]()
 
     for (cotacao <- cotacoesTeste) {
-      input ++= ArrayBuffer(cotacao.data.toDouble)
+      input ++= ArrayBuffer(cotacao.data.toDouble / 1000000000)
       output ++= ArrayBuffer(cotacao.cotacao)
-      //seriesTeste.add(cotacao.data.toDouble, cotacao.cotacao)
+      seriesTeste.add(cotacao.data.toDouble, cotacao.cotacao)
     }
 
-    val linearRegress = new LinearRegression(input.toArray, output.toArray, 0.015)
-    linearRegress.train(() => Unit)
+    val linearRegress = new LinearRegression(input.toArray, output.toArray, 0.005)
+    linearRegress.train()
 
     val series = new XYSeries("Cotacoes")
     val seriesPrevisao = new XYSeries("Previsao")
 
-    val cotacoes: Array[DataCotacao] = Scrapper.cotacaoDolarEmReal(qtdDias = 10, pularDias = 50)
+    val cotacoes: Array[DataCotacao] = Scrapper.cotacaoDolarEmReal(qtdDias = 10, pularDias = 60)
     for (cotacao <- cotacoes) {
       series.add(cotacao.data.toDouble, cotacao.cotacao)
-      val input = cotacao.data.toDouble
+      val input = cotacao.data.toDouble / 100000000
       val output = linearRegress.predict(input)
-      seriesPrevisao.add(input, output)
+
+      println(output)
+
+      seriesPrevisao.add(cotacao.data.toDouble, output)
     }
 
-    val result = new XYSeriesCollection()
+    var result = new XYSeriesCollection()
+
     result.addSeries(seriesTeste)
     result.addSeries(series)
     result.addSeries(seriesPrevisao)
