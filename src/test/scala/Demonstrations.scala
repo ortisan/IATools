@@ -1,3 +1,4 @@
+import nak.regress.LinearRegression
 import org.jfree.chart.plot.PlotOrientation
 import org.jfree.chart.{ChartFactory, ChartFrame}
 import org.jfree.data.xy.{XYSeries, XYSeriesCollection}
@@ -70,7 +71,7 @@ class Demonstrations {
     for (i <- 0 until labels.length) {
       val label = labels(i)
       labelsPoints.get(label) match {
-        case Some(points: ArrayBuffer[Array[Double]]) => points ++= ArrayBuffer(dataset(i))
+        case Some(points: ArrayBuffer[Array[Double]]) => points += dataset(i)
         case None => labelsPoints += label -> ArrayBuffer(dataset(i))
       }
     }
@@ -123,8 +124,69 @@ class Demonstrations {
     var output = ArrayBuffer[Double]()
 
     for (cotacao <- cotacoesTeste) {
-      input ++= ArrayBuffer(cotacao.data.toDouble / 1000000000)
-      output ++= ArrayBuffer(cotacao.cotacao)
+      input += cotacao.data.toDouble / 1000000000
+      output += cotacao.cotacao
+      seriesTeste.add(cotacao.data.toDouble, cotacao.cotacao)
+    }
+
+    val linearRegress = new LinearRegression(input.toArray, output.toArray, 0.005)
+    linearRegress.train()
+
+    val series = new XYSeries("Cotacoes")
+    val seriesPrevisao = new XYSeries("Previsao")
+
+    val cotacoes: Array[DataCotacao] = Scrapper.cotacaoDolarEmReal(qtdDias = 10, pularDias = 60)
+    for (cotacao <- cotacoes) {
+      series.add(cotacao.data.toDouble, cotacao.cotacao)
+      val input = cotacao.data.toDouble / 100000000
+      val output = linearRegress.predict(input)
+
+      println(output)
+
+      seriesPrevisao.add(cotacao.data.toDouble, output)
+    }
+
+    var result = new XYSeriesCollection()
+
+    result.addSeries(seriesTeste)
+    result.addSeries(series)
+    result.addSeries(seriesPrevisao)
+
+    var chart = ChartFactory.createScatterPlot(
+      "Regressão do dólar", // chart title
+      "Valor em R$", // x axis label
+      "Data", // y axis label
+      result, // data
+      PlotOrientation.VERTICAL,
+      true, // include legend
+      true, // tooltips
+      false // urls
+    )
+
+    chart.getXYPlot.getRangeAxis().setAutoRange(true)
+
+
+    // create and display a frame...
+    val frame = new ChartFrame("Regressão do dólar", chart)
+    frame.pack()
+    frame.setVisible(true)
+
+  }
+
+  def demonstrateLinearRegressionWithRealDatasBreeze(): Unit = {
+
+    LinearRegression.regress()
+
+    val cotacoesTeste: Array[DataCotacao] = Scrapper.cotacaoDolarEmReal(qtdDias = 10, pularDias = 50)
+
+    val seriesTeste = new XYSeries("Cotacoes de teste")
+
+    var input = ArrayBuffer[Double]()
+    var output = ArrayBuffer[Double]()
+
+    for (cotacao <- cotacoesTeste) {
+      input += cotacao.data.toDouble / 1000000000
+      output += cotacao.cotacao
       seriesTeste.add(cotacao.data.toDouble, cotacao.cotacao)
     }
 
@@ -173,12 +235,13 @@ class Demonstrations {
   }
 
 
+
 }
 
 object Demonstrations extends App {
-  //new Demonstrations().demonstrateLinearRegression()
+  new Demonstrations().demonstrateLinearRegression()
   new Demonstrations().demonstrateKnn()
-  //new Demonstrations().demonstrateLinearRegressionWithRealDatas()
+  new Demonstrations().demonstrateLinearRegressionWithRealDatas()
 }
 
 

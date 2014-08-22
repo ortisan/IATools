@@ -25,7 +25,7 @@ object Scrapper extends App {
         doc.select("td:eq(1)").first().text().replace("R$", "").toDouble
       }
       var dataZona = ZonedDateTime.of(date, zona)
-      datasCotacao ++= ArrayBuffer(new DataCotacao(dataZona.toEpochSecond(), cotacao))
+      datasCotacao += new DataCotacao(dataZona.toEpochSecond(), cotacao)
       date = date.plus(1, ChronoUnit.DAYS)
     }
 
