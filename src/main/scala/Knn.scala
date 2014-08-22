@@ -1,4 +1,4 @@
-import scala.collection.mutable
+import scala.collection.mutable.ArrayBuffer
 
 /**
  * Created by marceloortizdesantana on 18/08/14.
@@ -8,9 +8,9 @@ object Knn {
   def classify(input: Array[Double], dataset: Array[Array[Double]], labels: Array[String], k: Int): String = {
     require(dataset.length == labels.length && k < dataset.length, "Length of labels must be equals the dataset length(rows), and k must be <= dataset  length.")
 
-    var distancesLabels: Array[DistanceLabel] = Array()
+    var distancesLabels: ArrayBuffer[DistanceLabel] = ArrayBuffer()
     for (i <- 0 until dataset.length) {
-      distancesLabels = distancesLabels :+ new DistanceLabel(0.0, labels(i))
+      distancesLabels += new DistanceLabel(0.0, labels(i))
     }
 
     for {

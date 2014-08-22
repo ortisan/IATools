@@ -13,7 +13,7 @@ class TestKnn extends FlatSpec {
 
     assert(clazz == "B")
 
-    dataset = Array(Array(1.0, 1.1), Array(1.1, 1.1), Array(0.0, 0.0), Array(0.0, 0.1))
+    dataset = Array(Array(0.0, 0.0), Array(0.0, 0.1), Array(1.0, 1.1), Array(1.1, 1.1))
     clazz = Knn.classify(input, dataset, labels, 1)
 
     assert(clazz == "A")

@@ -177,8 +177,8 @@ class Demonstrations {
 
 object Demonstrations extends App {
   //new Demonstrations().demonstrateLinearRegression()
-  //new Demonstrations().demonstrateKnn()
-  new Demonstrations().demonstrateLinearRegressionWithRealDatas()
+  new Demonstrations().demonstrateKnn()
+  //new Demonstrations().demonstrateLinearRegressionWithRealDatas()
 }
 
 
