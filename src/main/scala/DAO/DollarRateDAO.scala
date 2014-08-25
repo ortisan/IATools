@@ -8,7 +8,7 @@ import dto.DollarRate
  */
 object DollarRateDAO extends DAO {
 
-  def insert(rates: Array[DollarRate]): Unit = {
+  def insert(rates: DollarRate*): Unit = {
     val mongoClient = super.getConnection()
     val db = mongoClient.getDB("Bolsa")
     val collection = db.getCollection("Dolar")
