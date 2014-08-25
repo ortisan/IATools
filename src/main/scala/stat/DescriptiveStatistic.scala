@@ -1,17 +1,19 @@
+package stat
+
 /**
  * Created by marcelosantana on 25/08/2014.
  */
-object StatTools {
+object DescriptiveStatistic {
 
   def mean(inputs: Array[Double]) = inputs.foldLeft(0.0)((acum: Double, x: Double) => acum + x) / inputs.length
 
   def variance(inputs: Array[Double]): Double = {
-    val mean: Double = StatTools.mean(inputs)
+    val mean: Double = DescriptiveStatistic.mean(inputs)
     return inputs.map(x => math.pow(x - mean, 2)).foldLeft(0.0)((acum: Double, x: Double) => acum + x) / inputs.length
   }
 
   def standardDeviation(inputs: Array[Double]): Double = {
-    val variance = StatTools.variance(inputs)
+    val variance = DescriptiveStatistic.variance(inputs)
     return math.sqrt(variance)
   }
 
@@ -26,22 +28,22 @@ object StatTools {
   }
 
   def varianceAndStandardDeviation(inputs: Array[Double]): (Double, Double) = {
-    val variance = StatTools.variance(inputs)
+    val variance = DescriptiveStatistic.variance(inputs)
     val standardDeviation = math.sqrt(variance)
-    // returns  a tuple with the variance and standard deviation
+    // returns a tuple with the variance and standard deviation
     return (variance, standardDeviation)
   }
 
-  def descriptiveStatistics(input: Array[Double]): DescriptiveStat = {
+  def calculateDescriptiveStatistics(input: Array[Double]): DescriptiveStatData = {
     var min, max, mean, variance, standardDeviation = 0.0
-    mean = StatTools.mean(input)
+    mean = DescriptiveStatistic.mean(input)
     (min, max) = minMax(input)
     (variance, standardDeviation) = varianceAndStandardDeviation(input)
-    return new DescriptiveStat(mean, variance, standardDeviation, min, max)
+    return new DescriptiveStatData(mean, variance, standardDeviation, min, max)
   }
 
 }
 
-class DescriptiveStat(val mean: Double, val variance: Double, val standardDeviation: Double, val min: Double, val max: Double)
+class DescriptiveStatData(val mean: Double, val variance: Double, val standardDeviation: Double, val min: Double, val max: Double)
 
 

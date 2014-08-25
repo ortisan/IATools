@@ -1,3 +1,4 @@
+import IA.LinearRegressionGD
 import org.scalatest.FlatSpec
 
 /**

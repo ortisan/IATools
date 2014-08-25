@@ -1,3 +1,4 @@
+import IA.Knn
 import org.scalatest.FlatSpec
 
 /**

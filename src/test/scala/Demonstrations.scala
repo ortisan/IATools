@@ -1,7 +1,9 @@
+import IA.{LinearRegressionGD, Knn}
 import nak.regress.LinearRegression
 import org.jfree.chart.plot.PlotOrientation
 import org.jfree.chart.{ChartFactory, ChartFrame}
 import org.jfree.data.xy.{XYSeries, XYSeriesCollection}
+import scrappers.{DollarRate, ScrapperDollar}
 
 import scala.collection.mutable.ArrayBuffer
 
@@ -116,7 +118,7 @@ class Demonstrations {
 
   def demonstrateLinearRegressionWithRealDatas(): Unit = {
 
-    val cotacoesTeste: Array[DataCotacao] = Scrapper.cotacaoDolarEmReal(qtdDias = 10, pularDias = 50)
+    val cotacoesTeste: Array[DollarRate] = ScrapperDollar.getRateByDate(qtdDias = 10, pularDias = 50)
 
     val seriesTeste = new XYSeries("Cotacoes de teste")
 
@@ -125,8 +127,8 @@ class Demonstrations {
 
     for (cotacao <- cotacoesTeste) {
       input += cotacao.data.toDouble / 1000000000
-      output += cotacao.cotacao
-      seriesTeste.add(cotacao.data.toDouble, cotacao.cotacao)
+      output += cotacao.rate
+      seriesTeste.add(cotacao.data.toDouble, cotacao.rate)
     }
 
     val linearRegress = new LinearRegressionGD(input.toArray, output.toArray, 0.005)
@@ -135,9 +137,9 @@ class Demonstrations {
     val series = new XYSeries("Cotacoes")
     val seriesPrevisao = new XYSeries("Previsao")
 
-    val cotacoes: Array[DataCotacao] = Scrapper.cotacaoDolarEmReal(qtdDias = 10, pularDias = 60)
+    val cotacoes: Array[DollarRate] = ScrapperDollar.getRateByDate(qtdDias = 10, pularDias = 60)
     for (cotacao <- cotacoes) {
-      series.add(cotacao.data.toDouble, cotacao.cotacao)
+      series.add(cotacao.data.toDouble, cotacao.rate)
       val input = cotacao.data.toDouble / 100000000
       val output = linearRegress.predict(input)
 
@@ -175,7 +177,7 @@ class Demonstrations {
 
   def demonstrateLinearRegressionWithRealDatasBreeze(): Unit = {
 
-    val cotacoesTeste: Array[DataCotacao] = Scrapper.cotacaoDolarEmReal(qtdDias = 10, pularDias = 50)
+    val cotacoesTeste: Array[DollarRate] = ScrapperDollar.getRateByDate(qtdDias = 10, pularDias = 50)
 
     val seriesTeste = new XYSeries("Cotacoes de teste")
 
@@ -184,8 +186,8 @@ class Demonstrations {
 
     for (cotacao <- cotacoesTeste) {
       input += cotacao.data.toDouble / 1000000000
-      output += cotacao.cotacao
-      seriesTeste.add(cotacao.data.toDouble, cotacao.cotacao)
+      output += cotacao.rate
+      seriesTeste.add(cotacao.data.toDouble, cotacao.rate)
     }
 
     val linearRegress = new LinearRegressionGD(input.toArray, output.toArray, 0.005)
@@ -194,9 +196,9 @@ class Demonstrations {
     val series = new XYSeries("Cotacoes")
     val seriesPrevisao = new XYSeries("Previsao")
 
-    val cotacoes: Array[DataCotacao] = Scrapper.cotacaoDolarEmReal(qtdDias = 10, pularDias = 60)
+    val cotacoes: Array[DollarRate] = ScrapperDollar.getRateByDate(qtdDias = 10, pularDias = 60)
     for (cotacao <- cotacoes) {
-      series.add(cotacao.data.toDouble, cotacao.cotacao)
+      series.add(cotacao.data.toDouble, cotacao.rate)
       val input = cotacao.data.toDouble / 100000000
       val output = linearRegress.predict(input)
 
