@@ -10,7 +10,7 @@ libraryDependencies += "org.jsoup" % "jsoup" % "1.7.3"
 
 libraryDependencies += "org.mongodb" %% "casbah-core" % "2.7.3"
 
-libraryDependencies += "org.scalanlp" % "nak" % "1.2.1"
+libraryDependencies += "org.scalanlp" %% "nak" % "1.2.1"
 
 libraryDependencies += "org.scalatest" %% "scalatest" % "2.2.1" % "test"
 

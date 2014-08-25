@@ -37,7 +37,7 @@ class Demonstrations {
 
     chart.getXYPlot.getRangeAxis().setAutoRange(true)
 
-    val linearRegress = new LinearRegression(input, output, 0.015)
+    val linearRegress = new LinearRegressionGD(input, output, 0.015)
 
     def updateGraph() {
 
@@ -129,7 +129,7 @@ class Demonstrations {
       seriesTeste.add(cotacao.data.toDouble, cotacao.cotacao)
     }
 
-    val linearRegress = new LinearRegression(input.toArray, output.toArray, 0.005)
+    val linearRegress = new LinearRegressionGD(input.toArray, output.toArray, 0.005)
     linearRegress.train()
 
     val series = new XYSeries("Cotacoes")
@@ -175,8 +175,6 @@ class Demonstrations {
 
   def demonstrateLinearRegressionWithRealDatasBreeze(): Unit = {
 
-    LinearRegression.regress()
-
     val cotacoesTeste: Array[DataCotacao] = Scrapper.cotacaoDolarEmReal(qtdDias = 10, pularDias = 50)
 
     val seriesTeste = new XYSeries("Cotacoes de teste")
@@ -190,7 +188,7 @@ class Demonstrations {
       seriesTeste.add(cotacao.data.toDouble, cotacao.cotacao)
     }
 
-    val linearRegress = new LinearRegression(input.toArray, output.toArray, 0.005)
+    val linearRegress = new LinearRegressionGD(input.toArray, output.toArray, 0.005)
     linearRegress.train()
 
     val series = new XYSeries("Cotacoes")
@@ -226,14 +224,11 @@ class Demonstrations {
 
     chart.getXYPlot.getRangeAxis().setAutoRange(true)
 
-
     // create and display a frame...
     val frame = new ChartFrame("Regressão do dólar", chart)
     frame.pack()
     frame.setVisible(true)
-
   }
-
 
 
 }

@@ -8,7 +8,7 @@ class TestLinearRegression extends FlatSpec {
 
   "An linear regression" should "learn from inputs and outputs" in {
     //y = 2*x
-    val linearRegress = new LinearRegression(input = Array(0.0, 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0),
+    val linearRegress = new LinearRegressionGD(input = Array(0.0, 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0),
       output = Array(0.0, 2.0, 4.0, 6.0, 8.0, 10.0, 12.0, 14.0, 16.0, 18.0, 20.0), learningRate = 0.015)
     linearRegress.train(() => println("training..."))
     assert(linearRegress.predict(-1.0) >= -2.30 && linearRegress.predict(-1.0) <= -1.70)

@@ -1,3 +1,4 @@
+import scala.collection.mutable.ArrayBuffer
 import scala.util.Random
 
 /**
@@ -5,18 +6,29 @@ import scala.util.Random
  *
  * Based on lessons of https://class.coursera.org/ml-006
  */
-class LinearRegression(val input: Array[Double], val output: Array[Double], val learningRate: Double = 0.005) {
+class LinearRegressionGD(val input: Array[Double], val output: Array[Double], val learningRate: Double = 0.005) {
 
-  // my guess params.
-  var param0: Double = Random.nextInt(10)
-  var param1: Double = Random.nextInt(10)
+  var inputs = ArrayBuffer[Array[Double]]()
+  var params = ArrayBuffer[Double]()
+
+  for (i <- 0 until input.length) {
+    inputs(0)(i) = 1.0
+    inputs(1)(i) = input(i)
+    params(i) = new Random().nextInt(100).toDouble
+  }
 
   /**
    * Folows the linear equation ( a + bx ) where a = param0, b = param1 and x = input
    * @param input
    * @return value of linear equation.
    */
-  private def hipotesis(input: Double) = param0 + param1 * input
+  private def hipotesis(input: Double*): Double = {
+    var hip = params(0)
+    for (i <- 1 until params.length) {
+      hip += params(i) * input(i - 1)
+    }
+    return hip
+  }
 
   /**
    * Train the algorithm, minimizing the param0 and param1 of linear formula (param0 + param1 * x)
@@ -27,16 +39,24 @@ class LinearRegression(val input: Array[Double], val output: Array[Double], val 
     var iteration = 0
     var diffs = 1000.0
 
-    val m = input.length
+    val rows = inputs.length
 
     do {
       // calculate derivative of cost function
-      var derivative0: Double = 0.0
-      var derivative1: Double = 0.0
-      for (i <- 0 until m) {
-        val diffHip_Out = hipotesis(input(i)) - output(i)
+      var derivatives = ArrayBuffer[Double]()
+
+      for {
+        iRow <- 0 until inputs.length
+        iCol <- 0 until inputs(iRow).length
+      } {
+
+        derivatives(iRow) +=
+
+
+
+        val diffHip_Out = hipotesis(inputs(i)) - output(i)
         derivative0 += diffHip_Out
-        derivative1 += diffHip_Out * input(i)
+        derivative1 += diffHip_Out * inputs(i)
       }
 
       val temp0 = param0 - learningRate * ((1.0 / m) * derivative0)
