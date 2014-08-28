@@ -34,13 +34,13 @@ object DescriptiveStatistic {
     return (variance, standardDeviation)
   }
 
-  def calculateDescriptiveStatistics(input: Array[Double]): DescriptiveStatData = {
+  /*def calculateDescriptiveStatistics(input: Array[Double]): DescriptiveStatData = {
     var min, max, mean, variance, standardDeviation = 0.0
     mean = DescriptiveStatistic.mean(input)
     (min, max) = minMax(input)
     (variance, standardDeviation) = varianceAndStandardDeviation(input)
     return new DescriptiveStatData(mean, variance, standardDeviation, min, max)
-  }
+  }*/
 
 }
 

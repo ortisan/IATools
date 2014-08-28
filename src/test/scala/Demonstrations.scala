@@ -1,9 +1,12 @@
-import IA.{LinearRegressionGD, Knn}
+import java.time.temporal.{ChronoField, TemporalField}
+
+import IA.{LinearRegression, Knn}
+import dto.DollarRate
 import nak.regress.LinearRegression
 import org.jfree.chart.plot.PlotOrientation
 import org.jfree.chart.{ChartFactory, ChartFrame}
 import org.jfree.data.xy.{XYSeries, XYSeriesCollection}
-import scrappers.{DollarRate, ScrapperDollar}
+import scrappers.{ScrapperDollar}
 
 import scala.collection.mutable.ArrayBuffer
 
@@ -39,7 +42,7 @@ class Demonstrations {
 
     chart.getXYPlot.getRangeAxis().setAutoRange(true)
 
-    val linearRegress = new LinearRegressionGD(input, output, 0.015)
+    val linearRegress = new LinearRegression(input, output, 0.015)
 
     def updateGraph() {
 
@@ -126,12 +129,12 @@ class Demonstrations {
     var output = ArrayBuffer[Double]()
 
     for (cotacao <- cotacoesTeste) {
-      input += cotacao.data.toDouble / 1000000000
-      output += cotacao.rate
-      seriesTeste.add(cotacao.data.toDouble, cotacao.rate)
+      input += cotacao.date.getLong(ChronoField.MILLI_OF_DAY)
+      output += cotacao.value
+      seriesTeste.add(cotacao.date.getLong(ChronoField.MILLI_OF_DAY).toDouble, cotacao.value)
     }
 
-    val linearRegress = new LinearRegressionGD(input.toArray, output.toArray, 0.005)
+    val linearRegress = new LinearRegression(input.toArray, output.toArray, 0.005)
     linearRegress.train()
 
     val series = new XYSeries("Cotacoes")
@@ -139,13 +142,13 @@ class Demonstrations {
 
     val cotacoes: Array[DollarRate] = ScrapperDollar.getRateByDate(qtdDias = 10, pularDias = 60)
     for (cotacao <- cotacoes) {
-      series.add(cotacao.data.toDouble, cotacao.rate)
-      val input = cotacao.data.toDouble / 100000000
+      series.add(cotacao.date.getLong(ChronoField.MILLI_OF_DAY), cotacao.value)
+      val input = cotacao.date.getLong(ChronoField.MILLI_OF_DAY)
       val output = linearRegress.predict(input)
 
       println(output)
 
-      seriesPrevisao.add(cotacao.data.toDouble, output)
+      seriesPrevisao.add(cotacao.date.getLong(ChronoField.MILLI_OF_DAY).toDouble, output)
     }
 
     var result = new XYSeriesCollection()
@@ -185,12 +188,12 @@ class Demonstrations {
     var output = ArrayBuffer[Double]()
 
     for (cotacao <- cotacoesTeste) {
-      input += cotacao.data.toDouble / 1000000000
-      output += cotacao.rate
-      seriesTeste.add(cotacao.data.toDouble, cotacao.rate)
+      input += cotacao.date.getLong(ChronoField.MILLI_OF_DAY)
+      output += cotacao.value
+      seriesTeste.add(cotacao.date.getLong(ChronoField.MILLI_OF_DAY).toDouble, cotacao.value)
     }
 
-    val linearRegress = new LinearRegressionGD(input.toArray, output.toArray, 0.005)
+    val linearRegress = new LinearRegression(input.toArray, output.toArray, 0.005)
     linearRegress.train()
 
     val series = new XYSeries("Cotacoes")
@@ -198,13 +201,13 @@ class Demonstrations {
 
     val cotacoes: Array[DollarRate] = ScrapperDollar.getRateByDate(qtdDias = 10, pularDias = 60)
     for (cotacao <- cotacoes) {
-      series.add(cotacao.data.toDouble, cotacao.rate)
-      val input = cotacao.data.toDouble / 100000000
+      series.add(cotacao.date.getLong(ChronoField.MILLI_OF_DAY).toDouble, cotacao.value)
+      val input = cotacao.date.getLong(ChronoField.MILLI_OF_DAY).toDouble
       val output = linearRegress.predict(input)
 
       println(output)
 
-      seriesPrevisao.add(cotacao.data.toDouble, output)
+      seriesPrevisao.add(cotacao.date.getLong(ChronoField.MILLI_OF_DAY).toDouble, output)
     }
 
     var result = new XYSeriesCollection()
