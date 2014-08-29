@@ -9,6 +9,8 @@ import dto.DollarRate
 object DollarRateDAO extends DAO {
 
   def insert(rates: DollarRate*): Unit = {
+    require(rates.length >= 0, "An index rate is required.")
+
     val mongoClient = super.getConnection()
     val db = mongoClient.getDB("Bolsa")
     val collection = db.getCollection("Dolar")

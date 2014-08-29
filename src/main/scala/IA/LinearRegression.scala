@@ -38,7 +38,7 @@ class LinearRegression(val input: Array[Double], val output: Array[Double], val 
   }
 
   private def hipotesis(inputs: Array[Double]): Double = {
-    require(inputs.length == params.length)
+    require(inputs != null && inputs.length > 0, "A input is null or empty.")
 
     var hip = 0.0
 
