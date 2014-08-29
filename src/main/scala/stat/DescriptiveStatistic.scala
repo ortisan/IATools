@@ -38,6 +38,11 @@ object DescriptiveStatistic {
     (mean, variance, standardDeviation)
   }
 
+  /**
+   * Make a descriptive statistics from an input.
+   * @param input
+   * @return Dto
+   */
   def calculateDescriptiveStatistics(input: Array[Double]): DescriptiveStatData = {
     require(input != null && input.length > 0)
     val (min, max) = minMax(input)
@@ -45,7 +50,5 @@ object DescriptiveStatistic {
     new DescriptiveStatData(mean, variance, standardDeviation, min, max)
   }
 }
-
-class DescriptiveStatData(val mean: Double, val variance: Double, val standardDeviation: Double, val min: Double, val max: Double)
 
 

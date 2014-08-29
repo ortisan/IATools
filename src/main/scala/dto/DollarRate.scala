@@ -3,6 +3,8 @@ package dto
 import java.time.LocalDateTime
 
 /**
- * Created by marcelosantana on 25/08/2014.
+ * Represents the data of dollar rate for a date.
+ * @param date
+ * @param value
  */
 class DollarRate(var date: LocalDateTime, var value: Double)
