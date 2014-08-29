@@ -1,24 +1,26 @@
 package stat
 
+import dto.DescriptiveStatData
+
 /**
  * Created by marcelosantana on 25/08/2014.
  */
 object DescriptiveStatistic {
 
-  def mean(inputs: Array[Double]) = inputs.foldLeft(0.0)((acum: Double, x: Double) => acum + x) / inputs.length
+  def mean(inputs: Array[Double], populacional: Boolean = true) = inputs.foldLeft(0.0)((acum: Double, x: Double) => acum + x) / (if (populacional) inputs.length else inputs.length - 1)
 
-  def variance(inputs: Array[Double]): Double = {
-    val mean: Double = DescriptiveStatistic.mean(inputs)
+  def variance(inputs: Array[Double], populacional: Boolean = true): Double = {
+    val mean: Double = DescriptiveStatistic.mean(inputs, populacional)
     inputs.map(x => math.pow(x - mean, 2)).foldLeft(0.0)((acum: Double, x: Double) => acum + x) / inputs.length
   }
 
-  def meanVariance(inputs: Array[Double]): (Double, Double) = {
-    val mean: Double = DescriptiveStatistic.mean(inputs)
+  def meanVariance(inputs: Array[Double], populacional: Boolean = true): (Double, Double) = {
+    val mean: Double = DescriptiveStatistic.mean(inputs, populacional)
     (mean, inputs.map(x => math.pow(x - mean, 2)).foldLeft(0.0)((acum: Double, x: Double) => acum + x) / inputs.length)
   }
 
-  def standardDeviation(inputs: Array[Double]): Double = {
-    val variance = DescriptiveStatistic.variance(inputs)
+  def standardDeviation(inputs: Array[Double], populacional: Boolean = true): Double = {
+    val variance = DescriptiveStatistic.variance(inputs, populacional)
     math.sqrt(variance)
   }
 
@@ -32,10 +34,15 @@ object DescriptiveStatistic {
     (min, max)
   }
 
-  def meanVarianceAndStandardDeviation(inputs: Array[Double]): (Double, Double, Double) = {
-    val (mean, variance) = DescriptiveStatistic.meanVariance(inputs)
+  def meanVarianceAndStandardDeviation(inputs: Array[Double], populacional: Boolean = true): (Double, Double, Double) = {
+    val (mean, variance) = DescriptiveStatistic.meanVariance(inputs, populacional)
     val standardDeviation = math.sqrt(variance)
     (mean, variance, standardDeviation)
+  }
+
+  def standarize(inputs: Array[Double]): Array[Double] = {
+    val (mean, variance, standardDeviation) = meanVarianceAndStandardDeviation(inputs, populacional = false)
+    for (input <- inputs) yield (input - mean) / standardDeviation
   }
 
   /**

@@ -23,7 +23,7 @@ object ScrapperDollar extends App {
       val dataFormatada = dateTime.format(DateTimeFormatter.BASIC_ISO_DATE)
       val url = s"https://finance.yahoo.com/currency/converter-pocket-guide/$dataFormatada/USD/BRL"
       val doc = Jsoup.parse(new URL(url), 2000)
-      var rate = {
+      val rate = {
         doc.select("td:eq(1)").first().text().replace("R$", "").toDouble
       }
       dollarRates += new DollarRate(dateTime, rate)

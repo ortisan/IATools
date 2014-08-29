@@ -41,7 +41,7 @@ class Demonstrations {
 
     chart.getXYPlot.getRangeAxis().setAutoRange(true)
 
-    val linearRegress = new LinearRegression(input, output, 0.015)
+    val linearRegress = new LinearRegression(input, output, 0.15)
 
     def updateGraph() {
 
@@ -239,8 +239,8 @@ class Demonstrations {
 
 object Demonstrations extends App {
   new Demonstrations().demonstrateLinearRegression()
-  new Demonstrations().demonstrateKnn()
-  new Demonstrations().demonstrateLinearRegressionWithRealDatas()
+  //new Demonstrations().demonstrateKnn()
+  //new Demonstrations().demonstrateLinearRegressionWithRealDatas()
 }
 
 
