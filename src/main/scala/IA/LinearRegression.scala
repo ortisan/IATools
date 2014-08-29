@@ -10,13 +10,15 @@ import scala.util.Random
  */
 class LinearRegression(val input: Array[Double], val output: Array[Double], val learningRate: Double = 0.005) {
 
-  var inputs = ArrayBuffer[Array[Double]]()
-  var params = ArrayBuffer[Double]()
+  val nRows = input.length
+  var iRow = -1;
+  var inputs = ArrayBuffer.fill[Array[Double]](nRows) {
+    iRow += 1
+    Array(1.0, input(iRow))
+  }
 
-  for (i <- 0 until input.length) {
-    inputs(0) = Array(1.0)
-    inputs(1) = Array(input(i))
-    params(i) = new Random().nextInt(100).toDouble
+  var params = ArrayBuffer.fill[Double](2) {
+    new Random().nextInt(100).toDouble
   }
 
   /**
@@ -32,7 +34,7 @@ class LinearRegression(val input: Array[Double], val output: Array[Double], val 
     var hip = 0.0
     var inputs = ArrayBuffer[Double](1.0) ++= input
     for (i <- 0 until params.length) {
-      hip += params(i) * input(i)
+      hip += params(i) * inputs(i)
     }
     hip
   }
@@ -46,29 +48,30 @@ class LinearRegression(val input: Array[Double], val output: Array[Double], val 
     var iteration = 0
     var diffs = 1000.0
 
-    val rows = inputs.length
-
-
     do {
-      var derivatives = ArrayBuffer[Double]()
+      var derivatives = ArrayBuffer.fill[Double](params.length)(0)
       // calculate derivative of cost function
       for {
-        iRow <- 0 until inputs.length
+        iRow <- 0 until nRows
         iCol <- 0 until inputs(iRow).length
       } {
         val diffHip_Out = hipotesis(inputs(iRow)) - output(iRow)
-        derivatives(iRow) += diffHip_Out * inputs(iRow)(iCol)
+        println(diffHip_Out)
+        derivatives(iCol) += diffHip_Out * inputs(iRow)(iCol)
       }
 
-      val temps = ArrayBuffer[Double]()
+      val temps = ArrayBuffer.fill[Double](derivatives.length)(0)
 
       for (i <- 0 until derivatives.length)
-        temps(i) = params(0) - learningRate * ((1.0 / inputs.length) * derivatives(i))
+        temps(i) = params(i) - learningRate * ((1.0 / nRows) * derivatives(i))
 
       for (i <- 0 until params.length) {
         diffs += math.abs(params(i) - temps(i))
         params(i) = temps(i)
       }
+
+      print(diffs)
+
       iteration += 1
 
       // call any callback

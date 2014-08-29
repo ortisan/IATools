@@ -2,7 +2,6 @@ import java.time.temporal.{ChronoField, TemporalField}
 
 import IA.{LinearRegression, Knn}
 import dto.DollarRate
-import nak.regress.LinearRegression
 import org.jfree.chart.plot.PlotOrientation
 import org.jfree.chart.{ChartFactory, ChartFrame}
 import org.jfree.data.xy.{XYSeries, XYSeriesCollection}
