@@ -18,7 +18,8 @@ class LinearRegression(val input: Array[Double], val output: Array[Double], val 
 
   var inputs = ArrayBuffer.fill[Array[Double]](nRows) {
     iRow += 1
-    Array(1.0, inputStandarized(iRow))
+    //Array(1.0, inputStandarized(iRow))
+    Array(1.0, input(iRow))
   }
 
   var params = ArrayBuffer.fill[Double](2) {

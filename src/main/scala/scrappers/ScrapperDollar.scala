@@ -16,17 +16,21 @@ import scala.collection.mutable.ArrayBuffer
  */
 object ScrapperDollar extends App {
 
-  def getRateByDate(ano: Int = 2014, mes: Month = Month.JANUARY, dia: Int = 1, qtdDias: Int = 50, pularDias: Int = 0): Array[DollarRate] = {
+  def getRateByDate(year: Int = 2014, month: Month = Month.JANUARY, day: Int = 1, nDays: Int = 50, nDaysSkip: Int = 0): Array[DollarRate] = {
     var dollarRates = ArrayBuffer[DollarRate]()
-    var dateTime = LocalDateTime.of(2014, Month.JANUARY, 1, 0, 0, 0).plus(pularDias, ChronoUnit.DAYS)
-    for (i <- 0 until qtdDias) {
+    var dateTime = LocalDateTime.of(2014, Month.JANUARY, 1, 0, 0, 0).plus(nDaysSkip, ChronoUnit.DAYS)
+    for (i <- 0 until nDays) {
       val dataFormatada = dateTime.format(DateTimeFormatter.BASIC_ISO_DATE)
       val url = s"https://finance.yahoo.com/currency/converter-pocket-guide/$dataFormatada/USD/BRL"
-      val doc = Jsoup.parse(new URL(url), 2000)
-      val rate = {
-        doc.select("td:eq(1)").first().text().replace("R$", "").toDouble
+      try {
+        val doc = Jsoup.parse(new URL(url), 2000)
+        val rate = {
+          doc.select("td:eq(1)").first().text().replace("R$", "").toDouble
+        }
+        dollarRates += new DollarRate(dateTime, rate)
+      } catch {
+        case e: Exception => println(e.getMessage)
       }
-      dollarRates += new DollarRate(dateTime, rate)
       dateTime = dateTime.plus(1, ChronoUnit.DAYS)
     }
     return dollarRates.toArray
