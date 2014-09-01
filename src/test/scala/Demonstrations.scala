@@ -120,7 +120,7 @@ class Demonstrations {
 
   def demonstrateLinearRegressionWithRealDatas(): Unit = {
 
-    val cotacoesTeste: Array[DollarRate] = ScrapperDollar.getRateByDate(nDays = 10, nDaysSkip = 50)
+    val cotacoesTeste: Array[DollarRate] = ScrapperDollar.scrap(nDays = 10, nDaysSkip = 50)
 
     val seriesTeste = new XYSeries("Cotacoes de teste")
 
@@ -139,7 +139,7 @@ class Demonstrations {
     val series = new XYSeries("Cotacoes")
     val seriesPrevisao = new XYSeries("Previsao")
 
-    val cotacoes: Array[DollarRate] = ScrapperDollar.getRateByDate(nDays = 10, nDaysSkip = 60)
+    val cotacoes: Array[DollarRate] = ScrapperDollar.scrap(nDays = 10, nDaysSkip = 60)
     for (cotacao <- cotacoes) {
       series.add(cotacao.date.getLong(ChronoField.MILLI_OF_DAY), cotacao.value)
       val input = cotacao.date.getLong(ChronoField.MILLI_OF_DAY)
@@ -179,7 +179,7 @@ class Demonstrations {
 
   def demonstrateLinearRegressionWithRealDatasBreeze(): Unit = {
 
-    val cotacoesTeste: Array[DollarRate] = ScrapperDollar.getRateByDate(nDays = 10, nDaysSkip = 50)
+    val cotacoesTeste: Array[DollarRate] = ScrapperDollar.scrap(nDays = 10, nDaysSkip = 50)
 
     val seriesTeste = new XYSeries("Cotacoes de teste")
 
@@ -198,7 +198,7 @@ class Demonstrations {
     val series = new XYSeries("Cotacoes")
     val seriesPrevisao = new XYSeries("Previsao")
 
-    val cotacoes: Array[DollarRate] = ScrapperDollar.getRateByDate(nDays = 10, nDaysSkip = 60)
+    val cotacoes: Array[DollarRate] = ScrapperDollar.scrap(nDays = 10, nDaysSkip = 60)
     for (cotacao <- cotacoes) {
       series.add(cotacao.date.getLong(ChronoField.MILLI_OF_DAY).toDouble, cotacao.value)
       val input = cotacao.date.getLong(ChronoField.MILLI_OF_DAY).toDouble

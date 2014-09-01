@@ -5,6 +5,7 @@ import java.time.temporal.ChronoUnit
 import java.time.{LocalDateTime, Month}
 
 import dto.IndexRate
+import org.apache.logging.log4j.LogManager
 import org.jsoup.Jsoup
 
 import scala.collection.mutable.ArrayBuffer
@@ -14,13 +15,18 @@ import scala.collection.mutable.ArrayBuffer
  */
 object ScrapperIndex {
 
-  def scrap(index: String, year: Int = 2014, month: Int = 1, day: Int = 1, nDays: Int = 50): Array[IndexRate] = {
+  private val logger = LogManager.getLogger(ScrapperIndex.getClass)
+
+  def scrap(index: String = "EBVSP", year: Int = 2014, month: Int = 1, day: Int = 1, nDays: Int = 50): Array[IndexRate] = {
+
+    logger.debug(s"Scrapping index with params: index = ${index}, year = ${year}, month: ${month}, day: ${day}, nDays: ${nDays}...")
 
     var dateTime = LocalDateTime.of(2014, Month.of(month), day, 0, 0, 0)
     val indexRates = ArrayBuffer[IndexRate]()
 
     for (i <- 0 until nDays) {
       val url = s"https://finance.yahoo.com/q/hp?s=%5${index}&a=${dateTime.getMonthValue - 1}&b=${dateTime.getDayOfMonth}&c=${dateTime.getYear}&d=${dateTime.getMonthValue - 1}&e=${dateTime.getDayOfMonth}&f=${dateTime.getYear}&g=d"
+      logger.debug(s"with Url: ${url} ...")
       try {
         val doc = Jsoup.parse(new URL(url), 3000)
         val elements = doc.select("td.yfnc_tabledata1")
@@ -34,10 +40,9 @@ object ScrapperIndex {
           val adjClose = elements.eq(6).text().replace(",", "").toDouble
 
           indexRates += new IndexRate(index, dateTime, close)
-
         }
       } catch {
-        case e: Exception => println(e.getMessage)
+        case e: Exception => logger.error("Error scrapping ${url}", e)
       }
 
       dateTime = dateTime.plus(1, ChronoUnit.DAYS)
