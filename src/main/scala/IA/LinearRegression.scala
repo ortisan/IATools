@@ -1,7 +1,5 @@
 package IA
 
-import stat.DescriptiveStatistic
-
 import scala.collection.mutable.ArrayBuffer
 import scala.util.Random
 
@@ -14,11 +12,9 @@ class LinearRegression(val input: Array[Double], val output: Array[Double], val 
 
   val nRows = input.length
   var iRow = -1
-  val inputStandarized = DescriptiveStatistic.standarize(input)
 
   var inputs = ArrayBuffer.fill[Array[Double]](nRows) {
     iRow += 1
-    //Array(1.0, inputStandarized(iRow))
     Array(1.0, input(iRow))
   }
 

@@ -8,7 +8,7 @@ import scrappers.ScrapperDollar
 /**
  * Created by marcelosantana on 29/08/2014.
  */
-object Tools extends App {
+object  Tools extends App {
 
   val dollarsRate = ScrapperDollar.getRateByDate(year = 2013, nDays = 300)
   val writer = new PrintWriter(new File("c:/temp/dollar.csv"))
